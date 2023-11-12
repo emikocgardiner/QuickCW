@@ -3,3 +3,7 @@ data/
 results/
 *.out
 *.lprof
+
+*.egg-info/
+build/
+dist/
