@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 #import corner
 
 import pickle
+import argparse
 
 import enterprise
 from enterprise.pulsar import Pulsar
@@ -30,8 +31,36 @@ import QuickCW.QuickCW as QuickCW
 from QuickCW.QuickMCMCUtils import ChainParams
 #import QuickCW.FastLikelihoodNumba as FastLikelihoodNumba
 
+####################################################################################
+#
+# Set up argparser
+#
+####################################################################################
+def _setup_argparse():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('data_pkl', type=str,
+                        help='pkl data file path, including filename ending in .pkl')
+    parser.add_argument('save_file', type=str,
+                        help='save data file path, including filename ending in .h5')
+    
+    
+    parser.add_argument('--noise_file', action='store', dest='noise_file', type=str,
+                        default='/Users/emigardiner/GWs/holodeck/output/holodeck_extension_15yr_stuff/v1p1_all_dict.json',
+                        help='Name of json file containing white noise dictionary')
+    parser.add_argument('--rn_file', action='store', dest='rn_emp_dist_file', type=str,
+                        default=None,)
+    parser.add_argument('--')
+
+    
+    args = parser.parse_args()
+    return args
+
+args = _setup_argparse()
+
+
+
 #make sure this points to the pickled pulsars you want to analyze
-data_pkl = 'data/nanograv_11yr_psrs.pkl'
+data_pkl = args.data_pkl
 
 with open(data_pkl, 'rb') as psr_pkl:
     psrs = pickle.load(psr_pkl)
@@ -58,18 +87,21 @@ T_max = 3.
 n_chain = 4
 
 #make sure this points to your white noise dictionary
-noisefile = 'data/quickCW_noisedict_kernel_ecorr.json'
+# noisefile = 'data/quickCW_noisedict_kernel_ecorr.json'
+noisefile = args.noise_file
 
 #make sure this points to the RN empirical distribution file you plan to use (or set to None to not use empirical distributions)
-rn_emp_dist_file = 'data/emp_dist.pkl'
+# rn_emp_dist_file = 'data/emp_dist.pkl'
 #rn_emp_dist_file = None
+rn_emp_dist_file = args.rn_emp_dist_file
 
 #file containing information about pulsar distances - None means use pulsar distances present in psr objects
 #if not None psr objects must have zero distance and unit variance
 psr_dist_file = None
 
 #this is where results will be saved
-savefile = 'results/quickCW_test16.h5'
+# savefile = 'results/quickCW_test16.h5'
+savefile = args.save_file
 #savefile = None
 
 #Setup and start MCMC
@@ -89,7 +121,8 @@ chain_params = ChainParams(T_max,n_chain, n_block_status_update,
 pta,mcc = QuickCW.QuickCW(chain_params, psrs,
                                   amplitude_prior='detection', #specify amplitude prior to use - 'detection':uniform in log-amplitude, 'UL': uniform in amplitude
                                   psr_distance_file=psr_dist_file, #file to specify advanced (parallax+DM) pulsar distance priors, if None use regular Gaussian priors based on pulsar distances in pulsar objects
-                                  noise_json=noisefile)
+                                  noise_json=noisefile,
+                                  include_ecorr=False, backend_selection=False)
 
 #Some parameters in chain_params can be updated later if needed
 mcc.chain_params.thin = 10
