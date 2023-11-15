@@ -49,7 +49,6 @@ def _setup_argparse():
                         help='Name of json file containing white noise dictionary')
     parser.add_argument('--rn_file', action='store', dest='rn_emp_dist_file', type=str,
                         default=None,)
-    parser.add_argument('--')
 
     
     args = parser.parse_args()
