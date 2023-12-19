@@ -45,7 +45,7 @@ def _setup_argparse():
     
     
     parser.add_argument('--noise_file', action='store', dest='noise_file', type=str,
-                        default='/Users/emigardiner/GWs/holodeck/output/holodeck_extension_15yr_stuff/v1p1_all_dict.json',
+                        default='./data/v1p1_all_dict.json',
                         help='Name of json file containing white noise dictionary')
     parser.add_argument('--rn_file', action='store', dest='rn_emp_dist_file', type=str,
                         default=None,)
