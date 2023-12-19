@@ -49,6 +49,8 @@ def _setup_argparse():
                         help='Name of json file containing white noise dictionary')
     parser.add_argument('--rn_file', action='store', dest='rn_emp_dist_file', type=str,
                         default=None,)
+    parser.add_argument('-n', '--n_iter', action='store', dest='n_iterations', type=int,
+                        default=5_000_000,)
 
     
     args = parser.parse_args()
@@ -67,10 +69,10 @@ with open(data_pkl, 'rb') as psr_pkl:
 print(len(psrs))
 
 #number of iterations (increase to 100 million - 1 billion for actual analysis)
-N = 5_000_000
+N = args.n_iterations
 
 n_int_block = 10_000 #number of iterations in a block (which has one shape update and the rest are projection updates)
-save_every_n = 100_000 #number of iterations between saving intermediate results (needs to be intiger multiple of n_int_block)
+save_every_n = 100_000 #number of iterations between saving intermediate results (needs to be integer multiple of n_int_block)
 N_blocks = np.int64(N//n_int_block) #number of blocks to do
 fisher_eig_downsample = 2000 #multiplier for how much less to do more expensive updates to fisher eigendirections for red noise and common parameters compared to diagonal elements
 
@@ -81,7 +83,7 @@ assert N_blocks%n_status_update ==0 #or we won't print status updates
 assert N%save_every_n == 0 #or we won't save a complete block
 assert N%n_int_block == 0 #or we won't execute the right number of blocks
 
-#Parallel tempering prameters
+#Parallel tempering parameters
 T_max = 3.
 n_chain = 4
 
