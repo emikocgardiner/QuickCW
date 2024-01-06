@@ -55,7 +55,7 @@ def _setup_argparse():
                         default=5_000_000, help='Total number of MCMC iterations')
     parser.add_argument('--T_max', action='store', dest='T_max', type=float,
                         default=3.0, help='Max temperature in ladder')
-    parser.add_argument('--fix_rn', action='store_true', dest='fix_rn', type=bool,
+    parser.add_argument('--fix_rn', action='store_true', dest='fix_rn', 
                         default=False, help='Whether or not to fix red noise')
 
     
