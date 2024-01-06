@@ -24,6 +24,8 @@ import enterprise.constants as const
 
 from enterprise_extensions import deterministic
 
+from holodeck.constants import YR
+
 #import glob
 #import json
 
@@ -108,7 +110,8 @@ savefile = args.save_file
 #Setup and start MCMC
 #object containing common parameters for the mcmc chain
 chain_params = ChainParams(T_max,n_chain, n_block_status_update,
-                           freq_bounds=np.array([np.nan, 3e-7]), #prior bounds used on the GW frequency (a lower bound of np.nan is interpreted as 1/T_obs)
+                        #    freq_bounds=np.array([np.nan, 3e-7]), #prior bounds used on the GW frequency (a lower bound of np.nan is interpreted as 1/T_obs)
+                           freq_bounds=np.array([np.nan, 1/YR]), #prior bounds used on the GW frequency (a lower bound of np.nan is interpreted as 1/T_obs)
                            n_int_block=n_int_block, #number of iterations in a block (which has one shape update and the rest are projection updates)
                            save_every_n=save_every_n, #number of iterations between saving intermediate results (needs to be intiger multiple of n_int_block)
                            fisher_eig_downsample=fisher_eig_downsample, #multiplier for how much less to do more expensive updates to fisher eigendirections for red noise and common parameters compared to diagonal elements
