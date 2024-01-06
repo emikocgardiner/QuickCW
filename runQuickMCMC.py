@@ -50,11 +50,13 @@ def _setup_argparse():
                         default='./data/v1p1_all_dict.json',
                         help='Name of json file containing white noise dictionary')
     parser.add_argument('--rn_file', action='store', dest='rn_emp_dist_file', type=str,
-                        default=None,)
+                        default=None, help='Path to red noise file')
     parser.add_argument('-n', '--n_iter', action='store', dest='n_iterations', type=int,
-                        default=5_000_000,)
+                        default=5_000_000, help='Total number of MCMC iterations')
     parser.add_argument('--T_max', action='store', dest='T_max', type=float,
-                        default=3.0,)
+                        default=3.0, help='Max temperature in ladder')
+    parser.add_argument('--fix_rn', action='store_true', dest='fix_rn', type=bool,
+                        default=False, help='Whether or not to fix red noise')
 
     
     args = parser.parse_args()
@@ -122,7 +124,7 @@ chain_params = ChainParams(T_max,n_chain, n_block_status_update,
                            thin=100,  #thinning, i.e. save every `thin`th sample to file (increase to higher than one to keep file sizes small)
                            prior_draw_prob=0.2, de_prob=0.6, fisher_prob=0.3, #probability of different jump types
                            dist_jump_weight=0.2, rn_jump_weight=0.3, gwb_jump_weight=0.1, common_jump_weight=0.2, all_jump_weight=0.2, #probability of updating different groups of parameters
-                           fix_rn=False, zero_rn=False, fix_gwb=False, zero_gwb=False) #switches to turn off GWB or RN jumps and keep them fixed and to set them to practically zero (gamma=0.0, log10_A=-20)
+                           fix_rn=args.fix_rn, zero_rn=False, fix_gwb=False, zero_gwb=False) #switches to turn off GWB or RN jumps and keep them fixed and to set them to practically zero (gamma=0.0, log10_A=-20)
 
 pta,mcc = QuickCW.QuickCW(chain_params, psrs,
                                   amplitude_prior='detection', #specify amplitude prior to use - 'detection':uniform in log-amplitude, 'UL': uniform in amplitude
