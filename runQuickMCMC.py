@@ -53,6 +53,8 @@ def _setup_argparse():
                         default=None,)
     parser.add_argument('-n', '--n_iter', action='store', dest='n_iterations', type=int,
                         default=5_000_000,)
+    parser.add_argument('--T_max', action='store', dest='T_max', type=float,
+                        default=3.0,)
 
     
     args = parser.parse_args()
@@ -86,7 +88,7 @@ assert N%save_every_n == 0 #or we won't save a complete block
 assert N%n_int_block == 0 #or we won't execute the right number of blocks
 
 #Parallel tempering parameters
-T_max = 3.
+T_max = args.T_max
 n_chain = 4
 
 #make sure this points to your white noise dictionary
