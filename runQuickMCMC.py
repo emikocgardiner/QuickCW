@@ -57,6 +57,8 @@ def _setup_argparse():
                         default=3.0, help='Max temperature in ladder')
     parser.add_argument('--fix_rn', action='store_true', dest='fix_rn', 
                         default=False, help='Whether or not to fix red noise')
+    parser.add_argument('--freq_max', action='store', dest='freq_max', type=float,
+                            default=1.0, help='Maximum frequency in yr^-1')
 
     
     args = parser.parse_args()
@@ -115,7 +117,7 @@ savefile = args.save_file
 #object containing common parameters for the mcmc chain
 chain_params = ChainParams(T_max,n_chain, n_block_status_update,
                         #    freq_bounds=np.array([np.nan, 3e-7]), #prior bounds used on the GW frequency (a lower bound of np.nan is interpreted as 1/T_obs)
-                           freq_bounds=np.array([np.nan, 1/YR]), #prior bounds used on the GW frequency (a lower bound of np.nan is interpreted as 1/T_obs)
+                           freq_bounds=np.array([np.nan, args.freq_max]), #prior bounds used on the GW frequency (a lower bound of np.nan is interpreted as 1/T_obs)
                            n_int_block=n_int_block, #number of iterations in a block (which has one shape update and the rest are projection updates)
                            save_every_n=save_every_n, #number of iterations between saving intermediate results (needs to be intiger multiple of n_int_block)
                            fisher_eig_downsample=fisher_eig_downsample, #multiplier for how much less to do more expensive updates to fisher eigendirections for red noise and common parameters compared to diagonal elements
