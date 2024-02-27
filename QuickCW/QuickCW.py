@@ -66,8 +66,10 @@ def QuickCW(chain_params, psrs, noise_json=None, use_legacy_equad=False, include
     tmax = [p.toas.max() for p in psrs]
     Tspan = np.max(tmax) - np.min(tmin)
 
-    efac = parameter.Constant(1.0)
-    equad = parameter.Constant(-10)
+    # efac = parameter.Constant(1.0)
+    # equad = parameter.Constant(-10)
+    efac = parameter.Constant()
+    equad = parameter.Constant()
     ecorr = parameter.Constant()
 
     # define selection by observing backend
