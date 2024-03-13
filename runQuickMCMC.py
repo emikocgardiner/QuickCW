@@ -139,7 +139,9 @@ pta,mcc = QuickCW.QuickCW(chain_params, psrs,
 
 #Some parameters in chain_params can be updated later if needed
 # mcc.chain_params.thin = 10 # for 10_000_000 run
-mcc.chain_params.thin = N/1_000_000
+thin = int(N/1_000_000)
+print(f"{thin=}")
+mcc.chain_params.thin = thin0
 
 #Do the main MCMC iteration
 mcc.advance_N_blocks(N_blocks)
