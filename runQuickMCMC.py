@@ -47,7 +47,7 @@ def _setup_argparse():
     
     
     parser.add_argument('--noise_file', action='store', dest='noise_file', type=str,
-                        default='./data/v1p1_all_dict.json',
+                        default='./data/fake_pta_noisefile.json',
                         help='Name of json file containing white noise dictionary')
     parser.add_argument('--rn_file', action='store', dest='rn_emp_dist_file', type=str,
                         default=None, help='Path to red noise file')
@@ -58,7 +58,9 @@ def _setup_argparse():
     parser.add_argument('--fix_rn', action='store_true', dest='fix_rn', 
                         default=False, help='Whether or not to fix red noise')
     parser.add_argument('--freq_max', action='store', dest='freq_max', type=float,
-                            default=1.0, help='Maximum frequency in yr^-1')
+                            default=2.5e-8, help='Maximum CW frequency in Hz')
+    parser.add_argument('--gwb_comps', action='store', dest='gwb_comps', type=int,
+                            default=16, help='Number of frequency components to model in the GWB')
 
     
     args = parser.parse_args()
@@ -126,7 +128,8 @@ chain_params = ChainParams(T_max,n_chain, n_block_status_update,
                            thin=100,  #thinning, i.e. save every `thin`th sample to file (increase to higher than one to keep file sizes small)
                            prior_draw_prob=0.2, de_prob=0.6, fisher_prob=0.3, #probability of different jump types
                            dist_jump_weight=0.2, rn_jump_weight=0.3, gwb_jump_weight=0.1, common_jump_weight=0.2, all_jump_weight=0.2, #probability of updating different groups of parameters
-                           fix_rn=args.fix_rn, zero_rn=False, fix_gwb=False, zero_gwb=False) #switches to turn off GWB or RN jumps and keep them fixed and to set them to practically zero (gamma=0.0, log10_A=-20)
+                           fix_rn=args.fix_rn, zero_rn=False, fix_gwb=False, zero_gwb=False, #switches to turn off GWB or RN jumps and keep them fixed and to set them to practically zero (gamma=0.0, log10_A=-20)
+                           gwb_comps=args.gwb_comps) #  Number of frequency components to model in the GWB [14]
 
 pta,mcc = QuickCW.QuickCW(chain_params, psrs,
                                   amplitude_prior='detection', #specify amplitude prior to use - 'detection':uniform in log-amplitude, 'UL': uniform in amplitude
@@ -135,7 +138,8 @@ pta,mcc = QuickCW.QuickCW(chain_params, psrs,
                                   include_ecorr=False, backend_selection=False)
 
 #Some parameters in chain_params can be updated later if needed
-mcc.chain_params.thin = 10
+# mcc.chain_params.thin = 10 # for 10_000_000 run
+mcc.chain_params.thin = N/1_000_000
 
 #Do the main MCMC iteration
 mcc.advance_N_blocks(N_blocks)
