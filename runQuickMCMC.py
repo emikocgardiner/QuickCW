@@ -57,6 +57,8 @@ def _setup_argparse():
                         default=3.0, help='Max temperature in ladder')
     parser.add_argument('--fix_rn', action='store_true', dest='fix_rn', 
                         default=False, help='Whether or not to fix red noise')
+    parser.add_argument('--exclude_cw', action='store_true', dest='exclude_cw', 
+                        default=False, help='Whether or not to exclude a CW in the model')
     parser.add_argument('--freq_max', action='store', dest='freq_max', type=float,
                             default=2.5e-8, help='Maximum CW frequency in Hz')
     parser.add_argument('--gwb_comps', action='store', dest='gwb_comps', type=int,
@@ -70,8 +72,11 @@ args = _setup_argparse()
 
 
 
-#make sure this points to the pickled pulsars you want to analyze
+# make sure this points to the pickled pulsars you want to analyze
 data_pkl = args.data_pkl
+
+# whether to include CW in the model
+include_cw = False if args.exclude_cw else True
 
 with open(data_pkl, 'rb') as psr_pkl:
     psrs = pickle.load(psr_pkl)
@@ -129,6 +134,7 @@ chain_params = ChainParams(T_max,n_chain, n_block_status_update,
                            prior_draw_prob=0.2, de_prob=0.6, fisher_prob=0.3, #probability of different jump types
                            dist_jump_weight=0.2, rn_jump_weight=0.3, gwb_jump_weight=0.1, common_jump_weight=0.2, all_jump_weight=0.2, #probability of updating different groups of parameters
                            fix_rn=args.fix_rn, zero_rn=False, fix_gwb=False, zero_gwb=False, #switches to turn off GWB or RN jumps and keep them fixed and to set them to practically zero (gamma=0.0, log10_A=-20)
+                           includeCW=include_cw, # If False, we are not including the CW in the likelihood (good for testing) [True]
                            gwb_comps=args.gwb_comps) #  Number of frequency components to model in the GWB [14]
 
 pta,mcc = QuickCW.QuickCW(chain_params, psrs,
