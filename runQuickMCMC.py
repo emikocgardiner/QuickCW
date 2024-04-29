@@ -141,7 +141,7 @@ chain_params = ChainParams(T_max,n_chain, n_block_status_update,
                            thin=100,  #thinning, i.e. save every `thin`th sample to file (increase to higher than one to keep file sizes small)
                            prior_draw_prob=0.2, de_prob=0.6, fisher_prob=0.3, #probability of different jump types
                            dist_jump_weight=0.2, rn_jump_weight=0.3, gwb_jump_weight=0.1, common_jump_weight=0.2, all_jump_weight=0.2, #probability of updating different groups of parameters
-                           fix_rn=args.fix_rn, zero_rn=args.zer_rn, fix_gwb=args.fix_gwb, zero_gwb=args.zero_gwn, #switches to turn off GWB or RN jumps and keep them fixed and to set them to practically zero (gamma=0.0, log10_A=-20)
+                           fix_rn=args.fix_rn, zero_rn=args.zero_rn, fix_gwb=args.fix_gwb, zero_gwb=args.zero_gwn, #switches to turn off GWB or RN jumps and keep them fixed and to set them to practically zero (gamma=0.0, log10_A=-20)
                            includeCW=include_cw, # If False, we are not including the CW in the likelihood (good for testing) [True]
                            gwb_comps=args.gwb_comps) #  Number of frequency components to model in the GWB [14]
 
