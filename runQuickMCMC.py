@@ -55,8 +55,16 @@ def _setup_argparse():
                         default=5_000_000, help='Total number of MCMC iterations')
     parser.add_argument('--T_max', action='store', dest='T_max', type=float,
                         default=3.0, help='Max temperature in ladder')
+    
     parser.add_argument('--fix_rn', action='store_true', dest='fix_rn', 
                         default=False, help='Whether or not to fix red noise')
+    parser.add_argument('--zero_rn', action='store_true', dest='zero_rn', 
+                        default=False, help='Whether or not to zero red noise')
+    parser.add_argument('--fix_gwb', action='store_true', dest='fix_gwb', 
+                        default=False, help='Whether or not to fix gwb')
+    parser.add_argument('--zero_gwb', action='store_true', dest='zero_gwb', 
+                        default=False, help='Whether or not to zero gwb')
+    
     parser.add_argument('--exclude_cw', action='store_true', dest='exclude_cw', 
                         default=False, help='Whether or not to exclude a CW in the model')
     parser.add_argument('--freq_max', action='store', dest='freq_max', type=float,
@@ -108,7 +116,7 @@ noisefile = args.noise_file
 
 #make sure this points to the RN empirical distribution file you plan to use (or set to None to not use empirical distributions)
 # rn_emp_dist_file = 'data/emp_dist.pkl'
-#rn_emp_dist_file = None
+# rn_emp_dist_file = None
 rn_emp_dist_file = args.rn_emp_dist_file
 
 #file containing information about pulsar distances - None means use pulsar distances present in psr objects
@@ -133,7 +141,7 @@ chain_params = ChainParams(T_max,n_chain, n_block_status_update,
                            thin=100,  #thinning, i.e. save every `thin`th sample to file (increase to higher than one to keep file sizes small)
                            prior_draw_prob=0.2, de_prob=0.6, fisher_prob=0.3, #probability of different jump types
                            dist_jump_weight=0.2, rn_jump_weight=0.3, gwb_jump_weight=0.1, common_jump_weight=0.2, all_jump_weight=0.2, #probability of updating different groups of parameters
-                           fix_rn=args.fix_rn, zero_rn=False, fix_gwb=False, zero_gwb=False, #switches to turn off GWB or RN jumps and keep them fixed and to set them to practically zero (gamma=0.0, log10_A=-20)
+                           fix_rn=args.fix_rn, zero_rn=args.zer_rn, fix_gwb=args.fix_gwb, zero_gwb=args.zero_gwn, #switches to turn off GWB or RN jumps and keep them fixed and to set them to practically zero (gamma=0.0, log10_A=-20)
                            includeCW=include_cw, # If False, we are not including the CW in the likelihood (good for testing) [True]
                            gwb_comps=args.gwb_comps) #  Number of frequency components to model in the GWB [14]
 
