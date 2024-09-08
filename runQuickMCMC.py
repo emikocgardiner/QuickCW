@@ -55,6 +55,8 @@ def _setup_argparse():
                         default=5_000_000, help='Total number of MCMC iterations')
     parser.add_argument('--T_max', action='store', dest='T_max', type=float,
                         default=3.0, help='Max temperature in ladder')
+    parser.add_argument('--n_chain', action='store', dest='n_chain', type=int,
+                        default=4, help='Number of chains in MCMC')
     
     parser.add_argument('--fix_rn', action='store_true', dest='fix_rn', 
                         default=False, help='Whether or not to fix red noise')
@@ -108,7 +110,7 @@ assert N%n_int_block == 0 #or we won't execute the right number of blocks
 
 #Parallel tempering parameters
 T_max = args.T_max
-n_chain = 4
+n_chain = args.n_chain
 
 #make sure this points to your white noise dictionary
 # noisefile = 'data/quickCW_noisedict_kernel_ecorr.json'
