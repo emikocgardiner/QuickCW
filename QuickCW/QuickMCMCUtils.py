@@ -395,6 +395,7 @@ class ChainParams():
     :param gwb_comps:               Number of frequency components to model in the GWB [14]
     :param cos_gwtheta_bounds:      Prior bounds on the cosine of the GW theta sky location parameter (useful e.g. for targeted searches) [[-1,1]]
     :param gwphi_bounds:            Prior bounds on the the GW phi sky location parameter (useful e.g. for targeted searches) [[0,2*np.pi]]
+    :param m_max                    Prior upper bound on log10 chirp mass [10]
     :param de_history_size:         Size of the differential evolution buffer
     :param thin_de:                 How much to thin samples for the DE buffer
     :param log_fishers:             --
@@ -424,6 +425,7 @@ class ChainParams():
                  includeCW: bool = True, prior_recovery: bool = False, verbosity: int = 1,
                  freq_bounds: np.ndarray = np.array([np.nan, 1e-7], dtype=np.float64), gwb_comps: int = 14,
                  cos_gwtheta_bounds: np.ndarray = np.array([-1,1]), gwphi_bounds: np.ndarray = np.array([0,2*np.pi]),
+                 m_max=10,
                  de_history_size: int = 5_000, thin_de: int = 10_000,
                  log_fishers: bool = False, log_mean_likelihoods: bool = True,
                  savefile: str = None, thin: int = 100, samples_precision: type = np.single,
@@ -454,6 +456,7 @@ class ChainParams():
         self.gwb_comps = gwb_comps
         self.cos_gwtheta_bounds=cos_gwtheta_bounds
         self.gwphi_bounds=gwphi_bounds
+        self.m_max = m_max
         self.de_history_size = de_history_size
         self.thin_de = thin_de
         self.log_fishers = log_fishers

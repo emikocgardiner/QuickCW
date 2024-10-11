@@ -133,7 +133,8 @@ def QuickCW(chain_params, psrs, noise_json=None, use_legacy_equad=False, include
     log10_fgw = parameter.Uniform(np.log10(chain_params.freq_bounds[0]), np.log10(chain_params.freq_bounds[1]))(
         '0_log10_fgw')
 
-    m_max = 10
+    # m_max = 10
+    m_max = chain_params.m_max
 
     log10_mc = parameter.Uniform(7, m_max)('0_log10_mc')
 
