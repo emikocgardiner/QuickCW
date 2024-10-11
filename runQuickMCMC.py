@@ -71,6 +71,8 @@ def _setup_argparse():
                         default=False, help='Whether or not to exclude a CW in the model')
     parser.add_argument('--freq_max', action='store', dest='freq_max', type=float,
                             default=2.5e-8, help='Maximum CW frequency in Hz')
+    parser.add_argument('--m_max', action='store', dest='m_max', type=float,
+                            default=10, help='Maximum log10 chirp mass/M_sun')
     parser.add_argument('--gwb_comps', action='store', dest='gwb_comps', type=int,
                             default=16, help='Number of frequency components to model in the GWB')
 
@@ -135,6 +137,7 @@ savefile = args.save_file
 chain_params = ChainParams(T_max,n_chain, n_block_status_update,
                         #    freq_bounds=np.array([np.nan, 3e-7]), #prior bounds used on the GW frequency (a lower bound of np.nan is interpreted as 1/T_obs)
                            freq_bounds=np.array([np.nan, args.freq_max]), #prior bounds used on the GW frequency (a lower bound of np.nan is interpreted as 1/T_obs)
+                           m_max=args.m_max, # prior upper bound on log10 chirp mass
                            n_int_block=n_int_block, #number of iterations in a block (which has one shape update and the rest are projection updates)
                            save_every_n=save_every_n, #number of iterations between saving intermediate results (needs to be intiger multiple of n_int_block)
                            fisher_eig_downsample=fisher_eig_downsample, #multiplier for how much less to do more expensive updates to fisher eigendirections for red noise and common parameters compared to diagonal elements
