@@ -57,6 +57,8 @@ def _setup_argparse():
                         default=3.0, help='Max temperature in ladder')
     parser.add_argument('--n_chain', action='store', dest='n_chain', type=int,
                         default=4, help='Number of chains in MCMC')
+    parser.add_argument('--n_save', action='store', dest='n_save', type=int,
+                        default=1, help='Number of chains to save')
     
     parser.add_argument('--fix_rn', action='store_true', dest='fix_rn', 
                         default=False, help='Whether or not to fix red noise')
@@ -155,7 +157,8 @@ chain_params = ChainParams(T_max,n_chain, n_block_status_update,
                            dist_jump_weight=0.2, rn_jump_weight=0.3, gwb_jump_weight=0.1, common_jump_weight=0.2, all_jump_weight=0.2, #probability of updating different groups of parameters
                            fix_rn=args.fix_rn, zero_rn=args.zero_rn, fix_gwb=args.fix_gwb, zero_gwb=args.zero_gwb, #switches to turn off GWB or RN jumps and keep them fixed and to set them to practically zero (gamma=0.0, log10_A=-20)
                            includeCW=include_cw, # If False, we are not including the CW in the likelihood (good for testing) [True]
-                           gwb_comps=args.gwb_comps) #  Number of frequency components to model in the GWB [14]
+                           gwb_comps=args.gwb_comps, #  Number of frequency components to model in the GWB [14]
+                           save_first_n_chains=args.n_save) 
 
 pta,mcc = QuickCW.QuickCW(chain_params, psrs,
                                   amplitude_prior='detection', #specify amplitude prior to use - 'detection':uniform in log-amplitude, 'UL': uniform in amplitude
