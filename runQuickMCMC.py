@@ -73,7 +73,7 @@ def _setup_argparse():
                         default=False, help='Whether or not to exclude a CW in the model')
     parser.add_argument('--freq_max', action='store', dest='freq_max', type=float,
                             default=2.5e-8, help='Maximum CW frequency in Hz')
-    parser.add_argument('--freq_min', action='store', dest='freq_max', type=float,
+    parser.add_argument('--freq_min', action='store', dest='freq_min', type=float,
                             default=None, help='Minimum CW frequency in Hz')
     parser.add_argument('--m_max', action='store', dest='m_max', type=float,
                             default=10, help='Maximum log10 chirp mass/M_sun')
